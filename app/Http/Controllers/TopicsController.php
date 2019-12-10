@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\TopicRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 
 class TopicsController extends Controller
 {
@@ -26,6 +27,8 @@ class TopicsController extends Controller
             ->paginate(20);
         $active_users = $user->getActiveUsers();
         $links = $link->getAllCached();
+        //dd($links);
+        dd(Cache::has('larabbs_links'));
         return view('topics.index', compact('topics', 'active_users', 'links'));
     }
 
