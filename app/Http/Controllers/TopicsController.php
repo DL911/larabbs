@@ -27,8 +27,6 @@ class TopicsController extends Controller
             ->paginate(20);
         $active_users = $user->getActiveUsers();
         $links = $link->getAllCached();
-        //dd($links);
-        dd(Cache::has('larabbs_links'));
         return view('topics.index', compact('topics', 'active_users', 'links'));
     }
 
