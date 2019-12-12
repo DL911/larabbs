@@ -57,10 +57,8 @@ trait LastActivedAtHelper
 
         // 字段名称，如：user_1
         $field = $this->getHashField();
-
         // 三元运算符，优先选择 Redis 的数据，否则使用数据库中
         $datetime = Redis::hGet($hash, $field) ?: $value;
-
         // 如果存在的话，返回时间对应的 Carbon 实体
         if ($datetime) {
             return new Carbon($datetime);
