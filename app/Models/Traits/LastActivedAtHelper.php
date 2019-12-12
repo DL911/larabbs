@@ -77,6 +77,6 @@ trait LastActivedAtHelper
     public function getHashField()
     {
         // 字段名称，如：user_1
-        return $this->field_prefix . $this->id;
+        return $this->field_prefix ;//. $this->id;
     }
 }
