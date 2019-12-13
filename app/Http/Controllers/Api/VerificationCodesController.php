@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 use Overtrue\EasySms\EasySms;
+use Overtrue\EasySms\Exceptions\NoGatewayAvailableException;
 
 class VerificationCodesController extends Controller
 {
@@ -26,12 +27,12 @@ class VerificationCodesController extends Controller
                         'code' => $code
                     ],
                 ]);
-            } catch (\Overtrue\EasySms\Exceptions\NoGatewayAvailableException $exception) {
+            } catch (NoGatewayAvailableException $exception) {
                 $message = $exception->getException('aliyun')->getMessage();
                 abort(500, $message ?: '短信发送异常');
             }
         }
-        
+
         $key = 'verificationCode_'.Str::random(15);
         $expiredAt = now()->addMinutes(5);
         // 缓存验证码 5 分钟过期。
