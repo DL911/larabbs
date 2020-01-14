@@ -10,8 +10,12 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-
 Route::get('/', 'TopicsController@index')->name('root');
+
+Route::get('/test',function () use ($router) {
+    Redis::setex('dl:test', 201600,'test--dlong');
+    return Redis::get('dl:test');
+});
 
 // 用户身份验证相关的路由
 Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
