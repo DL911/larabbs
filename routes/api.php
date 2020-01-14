@@ -48,6 +48,10 @@ Route::prefix('v1')->namespace('Api')->name('api.v1.')->group(function() {
             // 分类列表
             Route::get('categories', 'CategoriesController@index')
                 ->name('categories.index');
+            // 话题列表，详情
+            Route::resource('topics', 'TopicsController')->only([
+                'index', 'show'
+            ]);
 
             // 某个用户的详情
             Route::get('users/{user}', 'UsersController@show')
@@ -64,6 +68,10 @@ Route::prefix('v1')->namespace('Api')->name('api.v1.')->group(function() {
                 // 编辑登录用户信息
                 Route::patch('user', 'UsersController@update')
                     ->name('user.update');
+                // 发布话题
+                Route::resource('topics', 'TopicsController')->only([
+                    'store', 'update', 'destroy'
+                ]);
             });
         });
 });
