@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Requests\Api\AuthorizationRequest;
 use App\Http\Requests\Api\SocialAuthorzationRequest;
 use App\Models\User;
+use App\Traits\PassportToken;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -17,6 +18,8 @@ use League\OAuth2\Server\Exception\OAuthServerException;
 
 class AuthorizationsController extends Controller
 {
+    use PassportToken;
+
     public function socialStore($type, SocialAuthorzationRequest $request)
     {
         $driver = Socialite::driver($type);
@@ -60,8 +63,11 @@ class AuthorizationsController extends Controller
                 break;
         }
 
-        $token= auth('api')->login($user);
-        return $this->respondWithToken($token)->setStatusCode(201);
+//        $token = auth('api')->login($user);
+//        return $this->respondWithToken($token)->setStatusCode(201);
+        $result = $this->getBearerTokenByUser($user, '1', false);
+
+        return response()->json($result)->setStatusCode(201);
 
     }
 
@@ -86,7 +92,7 @@ class AuthorizationsController extends Controller
     {
         try {
             return $server->respondToAccessTokenRequest($serverRequest, new Psr7Response)->withStatus(201);
-        } catch(OAuthServerException $e) {
+        } catch (OAuthServerException $e) {
             throw new AuthenticationException($e->getMessage());
         }
     }
@@ -109,7 +115,7 @@ class AuthorizationsController extends Controller
     {
         try {
             return $server->respondToAccessTokenRequest($serverRequest, new Psr7Response);
-        } catch(OAuthServerException $e) {
+        } catch (OAuthServerException $e) {
             return $this->response->errorUnauthorized($e->getMessage());
         }
     }
